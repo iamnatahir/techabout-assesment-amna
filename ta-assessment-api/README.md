@@ -107,6 +107,49 @@ ta-assessment-api/
    npm test
    ```
 
+8. ## Quick Testing Guide
+
+After starting the server, test the API using Postman.
+
+### Reviewer Login
+
+POST http://localhost:5001/auth/login
+
+```json
+{
+  "email": "hr@gmail.com",
+  "password": "123456"
+}
+```
+
+### Candidate Assessment
+
+GET http://localhost:5001/assessment
+
+Authorization:
+Bearer token123
+
+### Submit Assessment
+
+POST http://localhost:5001/submissions
+
+Authorization:
+Bearer token123
+
+### List Submissions
+
+GET http://localhost:5001/submissions
+
+Authorization:
+Bearer <JWT>
+
+### Review Submission
+
+PATCH http://localhost:5001/submissions/1/review
+
+Authorization:
+Bearer <JWT>
+
 ---
 
 ## 3. Required Product Features Implemented

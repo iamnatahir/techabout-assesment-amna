@@ -34,37 +34,33 @@ model AssessmentBrief {
 }
 
 model Submission {
+  id            Int      @id @default(autoincrement())
 
-  id Int @id @default(autoincrement())
+  candidateId   Int
+  assessmentId  Int
 
-  candidateId Int
-  assessmentId Int
+  workLink      String
+  fileReference String?
+  timeTaken     String
+  notes         String?
+  challenges    String?
 
-  workLink String
-  fileReference String
-  timeTaken String
-  notes String
-  challenges String
+  status        SubmissionStatus @default(Pending)
 
-  status SubmissionStatus @default(Pending)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime? @updatedAt
+  submittedAt   DateTime @default(now())
 
-  submittedAt DateTime @default(now())
+  candidate     Candidate       @relation(fields: [candidateId], references: [id])
+  assessment    AssessmentBrief @relation(fields: [assessmentId], references: [id])
 
-  candidate Candidate @relation(fields: [candidateId], references: [id])
-  assessment AssessmentBrief @relation(fields: [assessmentId], references: [id])
-
-  review Review?
-
-  auditLogs AuditLog[]
+  review        Review?
+  auditLogs     AuditLog[]
 
   @@unique([candidateId, assessmentId])
-
   @@index([status])
-
   @@index([submittedAt])
-
   @@index([candidateId])
-
 }
 model ReviewerUser {
   id            Int      @id @default(autoincrement())

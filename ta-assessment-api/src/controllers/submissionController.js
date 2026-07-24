@@ -14,9 +14,13 @@ const createSubmission = async (req, res) => {
             challenges
         } = req.body;
         const uploadedFile = req.file ? req.file.path : null;
+        const assessmentIdNumber = Number(assessmentId);
+        console.log("Body:", req.body);
+        console.log("File:", req.file);
+        
 
         if (
-            !assessmentId ||
+            !assessmentIdNumber ||
             !workLink ||
             !uploadedFile ||
             !timeTaken
@@ -31,7 +35,7 @@ const createSubmission = async (req, res) => {
             where: {
                 candidateId_assessmentId: {
                     candidateId: req.candidate.id,
-                    assessmentId
+                    assessmentId: assessmentIdNumber
                 }
             }
         });
@@ -46,7 +50,7 @@ const createSubmission = async (req, res) => {
         const submission = await prisma.submission.create({
             data: {
                 candidateId: req.candidate.id,
-                assessmentId,
+                assessmentId: assessmentIdNumber,
                 workLink,
                 fileReference: uploadedFile,
                 timeTaken,
@@ -346,7 +350,7 @@ const getAllSubmissions = async (req, res) => {
 
             orderBy: {
 
-                createdAt: "desc"
+                submittedAt: "desc"
 
             },
 
