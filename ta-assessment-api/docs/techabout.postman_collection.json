@@ -1,0 +1,275 @@
+{
+  "info": {
+    "_postman_id": "e4ffa670-557e-47b2-907d-ae49d98e9eb1",
+    "name": "techabout",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45063678",
+    "_collection_link": "https://go.postman.co/collection/45063678-e4ffa670-557e-47b2-907d-ae49d98e9eb1?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "http://localhost:5001/submissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "token123",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"hr@gmail.com\",\n    \"password\":\"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/auth/login",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"hr@gmail.com\",\n    \"password\":\"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/reviewer/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "reviewer",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/reviewer/profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{auth_secret_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/reviewer/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "reviewer",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/submissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{auth_secret_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/submissions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "submissions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/submissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/submissions?city=Lahore",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "submissions"
+          ],
+          "query": [
+            {
+              "key": "city",
+              "value": "Lahore"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/submissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/submissions?role=Backend Developer",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "submissions"
+          ],
+          "query": [
+            {
+              "key": "role",
+              "value": "Backend Developer"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/submissions/1/review",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0ovz}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"score\":90,\n    \"decision\":\"Accepted\",\n    \"reviewNote\":\"Excellent API Design\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/submissions/1/review",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "submissions",
+            "1",
+            "review"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_0ovz",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0ovz",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0ovz",
+      "secret": true
+    }
+  ]
+}
