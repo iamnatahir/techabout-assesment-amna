@@ -256,6 +256,87 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "http://localhost:5001/assessment",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "token123",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\":\"hr@gmail.com\",\n    \"password\":\"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/assessment",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "assessment"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:5001/submissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_06om}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"score\":95,\n  \"decision\":\"Accepted\",\n  \"reviewNote\":\"Excellent\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/submissions/1/review",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "submissions",
+            "1",
+            "review"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
@@ -269,6 +350,10 @@
     },
     {
       "key": "supabase_service_role_api_key_0ovz",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_06om",
       "secret": true
     }
   ]
