@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Candidate {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  city          String
+  role          String
+  privateToken  String   @unique
+
+  submissions   Submission[]
+}
+
+model AssessmentBrief {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  deadline      DateTime
+
+  submissions   Submission[]
+}
+
+model Submission {
+  id              Int      @id @default(autoincrement())
+
+  candidateId     Int
+  assessmentId    Int
+
+  workLink        String
+  fileReference   String
+  timeTaken       String
+  notes           String
+  challenges      String
+
+  status          String   @default("Pending")
+
+  submittedAt     DateTime @default(now())
+
+  candidate        Candidate        @relation(fields: [candidateId], references: [id])
+  assessment       AssessmentBrief  @relation(fields: [assessmentId], references: [id])
+
+  review          Review?
+
+  auditLogs       AuditLog[]
+
+  @@unique([candidateId, assessmentId])
+}
+
+model ReviewerUser {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password      String
+  role          String
+
+  reviews       Review[]
+}
+
+model Review {
+  id             Int      @id @default(autoincrement())
+
+  submissionId   Int      @unique
+  reviewerId     Int
+
+  score          Int
+  decision       String
+  reviewNote     String
+
+  reviewedAt     DateTime @default(now())
+
+  submission      Submission    @relation(fields: [submissionId], references: [id])
+  reviewer        ReviewerUser  @relation(fields: [reviewerId], references: [id])
+}
+
+model AuditLog {
+
+  id             Int      @id @default(autoincrement())
+
+  submissionId   Int
+
+  action         String
+
+  performedBy    String
+
+  createdAt      DateTime @default(now())
+
+  submission      Submission @relation(fields: [submissionId], references: [id])
+}
