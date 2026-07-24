@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
+const prisma = require("../config/prisma");
 
-const reviewerAuth = (req, res, next) => {
-
+const reviewerAuth = async (req, res, next) => {
     try {
 
-        // Get Authorization header (format: Bearer <token>)
+        // Get Authorization header
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
@@ -14,7 +14,7 @@ const reviewerAuth = (req, res, next) => {
             });
         }
 
-        // Split "Bearer <token>" and take the token part
+        // Expected format: Bearer <token>
         const token = authHeader.split(" ")[1];
 
         if (!token) {
@@ -24,32 +24,46 @@ const reviewerAuth = (req, res, next) => {
             });
         }
 
-        // Verify token signature and expiry using JWT_SECRET
+        // Verify JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Only HR reviewers can access protected HR routes
-        if (decoded.role !== "HR") {
-            return res.status(403).json({
+        // Find reviewer in DB
+        const reviewer = await prisma.reviewerUser.findUnique({
+            where: {
+                id: decoded.id
+            }
+        });
+
+        if (!reviewer) {
+            return res.status(401).json({
                 success: false,
-                message: "Access denied. HR role required"
+                message: "Reviewer not found"
             });
         }
 
-        // Attach reviewer info for controllers to use later
-        req.reviewer = decoded;
+        // Only HR can continue
+        if (reviewer.role !== "HR") {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied"
+            });
+        }
+
+        // Save reviewer for next middleware/controller
+        req.reviewer = reviewer;
 
         next();
 
     } catch (error) {
 
-        // jwt.verify throws if token is invalid or expired
+        console.log(error);
+
         return res.status(401).json({
             success: false,
-            message: "Invalid Token"
+            message: "Invalid or Expired Token"
         });
 
     }
-
 };
 
 module.exports = reviewerAuth;

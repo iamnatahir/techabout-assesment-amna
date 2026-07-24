@@ -6,6 +6,12 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum SubmissionStatus {
+  Pending
+  Reviewed
+  Accepted
+  Rejected
+}
 
 model Candidate {
   id            Int      @id @default(autoincrement())
@@ -28,31 +34,38 @@ model AssessmentBrief {
 }
 
 model Submission {
-  id              Int      @id @default(autoincrement())
 
-  candidateId     Int
-  assessmentId    Int
+  id Int @id @default(autoincrement())
 
-  workLink        String
-  fileReference   String
-  timeTaken       String
-  notes           String
-  challenges      String
+  candidateId Int
+  assessmentId Int
 
-  status          String   @default("Pending")
+  workLink String
+  fileReference String
+  timeTaken String
+  notes String
+  challenges String
 
-  submittedAt     DateTime @default(now())
+  status SubmissionStatus @default(Pending)
 
-  candidate        Candidate        @relation(fields: [candidateId], references: [id])
-  assessment       AssessmentBrief  @relation(fields: [assessmentId], references: [id])
+  submittedAt DateTime @default(now())
 
-  review          Review?
+  candidate Candidate @relation(fields: [candidateId], references: [id])
+  assessment AssessmentBrief @relation(fields: [assessmentId], references: [id])
 
-  auditLogs       AuditLog[]
+  review Review?
+
+  auditLogs AuditLog[]
 
   @@unique([candidateId, assessmentId])
-}
 
+  @@index([status])
+
+  @@index([submittedAt])
+
+  @@index([candidateId])
+
+}
 model ReviewerUser {
   id            Int      @id @default(autoincrement())
   name          String

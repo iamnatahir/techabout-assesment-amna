@@ -1,9 +1,14 @@
 const express = require("express");
+
 const router = express.Router();
+const { loginLimiter } = require("../middleware/rateLimiter");
 
 const { login } = require("../controllers/authController");
 
-// POST /login — HR reviewer login
-router.post("/login", login);
+router.post(
+    "/login",
+    loginLimiter,
+    login
+);
 
 module.exports = router;

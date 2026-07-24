@@ -1,6 +1,6 @@
+const prisma = require("../config/prisma");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const prisma = require("../config/prisma");
 
 const login = async (req, res) => {
 
@@ -8,50 +8,56 @@ const login = async (req, res) => {
 
         const { email, password } = req.body;
 
-        // Both fields are required for login
+        // Check required fields
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Email and password are required"
+                message: "Email and Password are required"
             });
         }
 
-        // Find reviewer by email
+        // Find reviewer
         const reviewer = await prisma.reviewerUser.findUnique({
-            where: { email }
+            where: {
+                email
+            }
         });
 
-        // Wrong email — do not reveal whether email or password failed
         if (!reviewer) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "Invalid Email or Password"
             });
         }
 
-        // Compare plain password with hashed password from DB
-        const isPasswordValid = await bcrypt.compare(password, reviewer.password);
+        // Compare password
+        const isPasswordCorrect = await bcrypt.compare(
+            password,
+            reviewer.password
+        );
 
-        if (!isPasswordValid) {
+        if (!isPasswordCorrect) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "Invalid Email or Password"
             });
         }
 
-        // Create JWT with reviewer id and role inside the payload
+        // Generate JWT
         const token = jwt.sign(
             {
                 id: reviewer.id,
                 role: reviewer.role
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1d" }
+            {
+                expiresIn: "1d"
+            }
         );
 
         return res.status(200).json({
             success: true,
-            message: "Login successful",
+            message: "Login Successful",
             token
         });
 

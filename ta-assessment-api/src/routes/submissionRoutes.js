@@ -1,19 +1,31 @@
 const express = require("express");
-
 const router = express.Router();
 
 const candidateAuth = require("../middleware/candidateAuth");
 const reviewerAuth = require("../middleware/reviewerAuth");
+const upload = require("../middleware/ upload");
+const { submissionLimiter } = require("../middleware/rateLimiter");
 
 const {
     createSubmission,
-    getSubmissions
+    getAllSubmissions,
+    reviewSubmission
 } = require("../controllers/submissionController");
 
-// Candidate creates a submission
-router.post("/", candidateAuth, createSubmission);
+router.post(
+    "/",
+    submissionLimiter,
+    candidateAuth,
+    upload.single("file"),
+    createSubmission
+);
 
-// HR lists submissions (filters + pagination)
-router.get("/", reviewerAuth, getSubmissions);
+router.get("/", reviewerAuth, getAllSubmissions);
+
+router.patch(
+    "/:id/review",
+    reviewerAuth,
+    reviewSubmission
+);
 
 module.exports = router;
